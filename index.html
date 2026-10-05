@@ -1,0 +1,2233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AK News Point - All-in-One Utility Portal</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#f3f6f9;
+  color:#222;
+}
+
+header{
+  background:#0d6efd;
+  color:white;
+  text-align:center;
+  padding:22px 15px;
+}
+
+header h1{
+  margin:0;
+  font-size:30px;
+}
+
+header p{
+  margin:8px 0 0;
+  font-size:16px;
+}
+
+.container{
+  width:95%;
+  max-width:1200px;
+  margin:25px auto;
+}
+
+.tool-menu{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:12px;
+  margin-bottom:25px;
+}
+
+.tool-card{
+  background:white;
+  border-radius:10px;
+  padding:15px;
+  text-align:center;
+  cursor:pointer;
+  box-shadow:0 3px 10px rgba(0,0,0,.10);
+  transition:.2s;
+  font-weight:bold;
+  font-size:14px;
+}
+
+.tool-card:hover{
+  transform:translateY(-2px);
+}
+
+.tool-card.active{
+  background:#0d6efd;
+  color:white;
+}
+
+.tool-box{
+  display:none;
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 3px 12px rgba(0,0,0,.12);
+  margin-bottom:25px;
+}
+
+.tool-box.active{
+  display:block;
+}
+
+.tool-box h2{
+  margin-top:0;
+  color:#0d6efd;
+}
+
+.tool-layout{
+  display:grid;
+  grid-template-columns:360px 1fr;
+  gap:25px;
+  align-items:start;
+}
+
+.controls{
+  background:#f8f9fa;
+  padding:18px;
+  border-radius:10px;
+}
+
+.controls label{
+  display:block;
+  font-weight:bold;
+  margin-top:12px;
+  margin-bottom:5px;
+}
+
+.controls input,
+.controls select,
+.controls textarea{
+  width:100%;
+  padding:10px;
+  border:1px solid #ccc;
+  border-radius:6px;
+  font-size:15px;
+}
+
+.controls input[type="range"]{
+  padding:0;
+}
+
+.unit-row{
+  display:flex;
+  gap:8px;
+}
+
+.unit-row input{
+  flex:2;
+}
+
+.unit-row select{
+  flex:1;
+}
+
+button{
+  border:0;
+  border-radius:6px;
+  padding:10px 14px;
+  cursor:pointer;
+  font-size:15px;
+  margin-top:12px;
+  background:#0d6efd;
+  color:white;
+}
+
+button:hover{
+  opacity:.9;
+}
+
+.btn-danger{
+  background:#dc3545;
+}
+
+.btn-secondary{
+  background:#6c757d;
+}
+
+.btn-success{
+  background:#198754;
+}
+
+.btn-row{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.btn-row button{
+  flex:1;
+  min-width:100px;
+}
+
+.preview{
+  min-height:380px;
+  background:#f1f3f5;
+  border:2px dashed #bbb;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+  overflow:auto;
+  flex-direction:column;
+}
+
+.preview canvas, .preview img{
+  max-width:100%;
+  max-height:450px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.15);
+  border-radius:4px;
+}
+
+#editorCanvas {
+  cursor: crosshair;
+}
+
+.pagination-controls{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:12px;
+}
+
+.pagination-controls button{
+  margin-top:0;
+  padding:6px 12px;
+  font-size:13px;
+}
+
+.pagination-controls span{
+  font-weight:bold;
+  font-size:14px;
+  color:#333;
+}
+
+.placeholder{
+  color:#777;
+  text-align:center;
+}
+
+.stats-box{
+  margin-top:10px;
+  padding:10px;
+  background:#e9ecef;
+  border-radius:6px;
+  font-size:14px;
+}
+
+.result{
+  margin-top:15px;
+  padding:12px;
+  background:#e9f7ef;
+  border-radius:7px;
+  font-weight:bold;
+}
+
+.crop-area{
+  margin-top:15px;
+  padding:12px;
+  background:#fff3cd;
+  border-radius:7px;
+  font-size:13px;
+}
+
+.checkbox-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:12px;
+}
+
+.checkbox-row input{
+  width:auto;
+}
+
+.signature-note{
+  font-size:12px;
+  color:#666;
+  margin-top:5px;
+}
+
+.pdf-merge-list{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.pdf-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:white;
+  padding:10px;
+  border-radius:8px;
+  box-shadow:0 1px 4px rgba(0,0,0,0.1);
+}
+
+.pdf-item-info{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.pdf-item canvas{
+  width:50px;
+  height:65px;
+  border:1px solid #ddd;
+  border-radius:3px;
+  object-fit:cover;
+}
+
+/* IMAGE TO PDF PREVIEW LIST STYLES */
+.img-pdf-list {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.img-pdf-card {
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 8px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+  transition: border-color 0.2s;
+}
+
+.img-pdf-card.selected {
+  border-color: #0d6efd;
+  background: #f0f7ff;
+}
+
+.img-pdf-card img {
+  width: 100%;
+  height: 110px;
+  object-fit: contain;
+  background: #f9f9f9;
+  border-radius: 4px;
+}
+
+.img-pdf-card .page-badge {
+  font-size: 11px;
+  font-weight: bold;
+  background: #0d6efd;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: 5px;
+}
+
+.img-pdf-actions {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.img-pdf-actions button {
+  padding: 3px 7px;
+  font-size: 11px;
+  margin-top: 0;
+}
+
+@media(max-width:800px){
+  .tool-layout{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+
+<!-- PDF LIBRARIES -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+</head>
+
+<body>
+
+<header>
+  <h1>AK News Point Tools</h1>
+  <p>Useful Utility Tools For Online Form Fill Up</p>
+</header>
+
+<div class="container">
+
+  <!-- TOOL MENU -->
+  <div class="tool-menu">
+    <div class="tool-card active" onclick="openTool('resizer',this)">🖼️ Image Resizer</div>
+    <div class="tool-card" onclick="openTool('editor',this)">✂️ Advanced Image Editor</div>
+    <div class="tool-card" onclick="openTool('photoDate',this)">📸 Name & Photo Date</div>
+    <div class="tool-card" onclick="openTool('sigCleaner',this)">✍️ Signature Cleaner</div>
+    <div class="tool-card" onclick="openTool('docScanner',this)">📄 B&W Doc Scanner</div>
+    <div class="tool-card" onclick="openTool('age',this)">🎂 Age Calculator</div>
+    <div class="tool-card" onclick="openTool('caseConverter',this)">🔤 Case & Word Counter</div>
+    <div class="tool-card" onclick="openTool('compressPdf',this)">🗜️ Compress PDF</div>
+    <div class="tool-card" onclick="openTool('imgToPdf',this)">🖼️ Image to PDF</div>
+    <div class="tool-card" onclick="openTool('mergePdf',this)">📑 Merge PDFs</div>
+    <div class="tool-card" onclick="openTool('splitPdf',this)">✂ Split PDF</div>
+    <div class="tool-card" onclick="openTool('passportGrid',this)">📸 8-Photo 4x6 Sheet</div>
+  </div>
+
+
+  <!-- 1. IMAGE RESIZER & COMPRESSOR -->
+  <div id="resizer" class="tool-box active">
+    <h2>Image Resizer & Compressor</h2>
+    <div class="tool-layout">
+      <div class="controls">
+        <label>Upload Image</label>
+        <input type="file" id="resizeFile" accept="image/*" onchange="loadResizeImage(event)">
+
+        <label>Target Size (KB)</label>
+        <input type="number" id="targetKB" placeholder="Example: 50">
+
+        <label>Width (PX)</label>
+        <input type="number" id="resizeWidth" placeholder="Width">
+
+        <label>Height (PX)</label>
+        <input type="number" id="resizeHeight" placeholder="Height">
+
+        <label>Output Format</label>
+        <select id="resizeFormat">
+          <option value="image/jpeg">JPG / JPEG</option>
+          <option value="image/png">PNG</option>
+          <option value="image/webp">WEBP</option>
+        </select>
+
+        <div class="btn-row">
+          <button class="btn-success" onclick="resizeDownload()">Resize & Download</button>
+          <button class="btn-secondary" onclick="resetResizer()">Reset</button>
+        </div>
+      </div>
+      <div class="preview">
+        <div id="resizePlaceholder" class="placeholder">Upload an image to preview</div>
+        <canvas id="resizeCanvas" style="display:none;"></canvas>
+        <div id="resizeStatus" class="stats-box" style="display:none; margin-top:15px;"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 2. ADVANCED IMAGE CROP & EDITOR -->
+  <div id="editor" class="tool-box">
+    <h2>Advanced Image Crop & Editor</h2>
+    <div class="tool-layout">
+      <div class="controls">
+        <label>Upload Image</label>
+        <input type="file" id="editorFile" accept="image/*" onchange="loadEditorImage(event)">
+
+        <label>Exact Width (PX)</label>
+        <input type="number" id="editorWidth" placeholder="Example: 500">
+
+        <label>Exact Height (PX)</label>
+        <input type="number" id="editorHeight" placeholder="Example: 600">
+
+        <button onclick="exactResize()" style="width:100%;">Exact Size / Resize</button>
+
+        <div class="crop-area">
+          <b>Manual Crop:</b><br>
+          Image par mouse hold karke drag karein aur box banayein, release karne par auto crop ho jayega.
+        </div>
+
+        <label>Brightness: <span id="brightnessValue">100</span>%</label>
+        <input type="range" id="brightness" min="0" max="200" value="100" oninput="updateEditor()">
+
+        <label>Contrast: <span id="contrastValue">100</span>%</label>
+        <input type="range" id="contrast" min="0" max="200" value="100" oninput="updateEditor()">
+
+        <label>Saturation: <span id="saturationValue">100</span>%</label>
+        <input type="range" id="saturation" min="0" max="200" value="100" oninput="updateEditor()">
+
+        <label>Sharpness: <span id="sharpnessValue">0</span></label>
+        <input type="range" id="sharpness" min="0" max="2" step="0.1" value="0" oninput="updateEditor()">
+
+        <label>Signature Upload</label>
+        <input type="file" id="signatureFile" accept="image/*" onchange="loadSignature(event)">
+        <div class="signature-note">Signature neeche poore photo ki width wale white strip mein fit hogi.</div>
+
+        <div class="checkbox-row">
+          <input type="checkbox" id="borderEnable" onchange="updateEditor()">
+          <label style="margin:0;">Add Border</label>
+        </div>
+
+        <label>Border Color</label>
+        <input type="color" id="borderColor" value="#000000" onchange="updateEditor()">
+
+        <label>Border Width (PX)</label>
+        <input type="number" id="borderWidth" value="2" min="1" max="30" onchange="updateEditor()">
+
+        <label>Output File Format</label>
+        <select id="editorFormat">
+          <option value="image/png">PNG</option>
+          <option value="image/jpeg">JPG / JPEG</option>
+          <option value="image/webp">WEBP</option>
+        </select>
+
+        <div class="btn-row">
+          <button class="btn-success" onclick="downloadEditor()">Download Image</button>
+          <button class="btn-secondary" onclick="resetEditor()">Reset Original</button>
+          <button class="btn-danger" onclick="closeEditor()">✖ Close</button>
+        </div>
+      </div>
+
+      <div class="preview" id="editorPreview">
+        <div id="editorPlaceholder" class="placeholder">Upload an image to start editing</div>
+        <canvas id="editorCanvas" style="display:none;"></canvas>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 3. NAME & PHOTO DATE GENERATOR -->
+  <div id="photoDate" class="tool-box">
+    <h2>Name & Date on Photo Generator</h2>
+    <div class="tool-layout">
+      <div class="controls">
+        <label>Upload Passport Photo</label>
+        <input type="file" id="pPhotoFile" accept="image/*" onchange="renderPhotoWithDate()">
+
+        <label>Candidate Name</label>
+        <input type="text" id="pName" placeholder="Example: RAHUL KUMAR" oninput="renderPhotoWithDate()">
+
+        <label>Date of Photo (DOP)</label>
+        <input type="date" id="pDate" onchange="renderPhotoWithDate()">
+
+        <div class="btn-row">
+          <button class="btn-success" onclick="downloadPhotoWithDate()">Download Photo</button>
+          <button class="btn-secondary" onclick="resetPhotoDate()">Reset</button>
+        </div>
+      </div>
+      <div class="preview">
+        <canvas id="photoDateCanvas" style="display:none;"></canvas>
+        <div id="pDatePlaceholder" class="placeholder">Upload photo to start preview</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 4. SIGNATURE CLEANER -->
+  <div id="sigCleaner" class="tool-box">
+    <h2>Signature Background Cleaner</h2>
+    <div class="tool-layout">
+      <div class="controls">
+        <label>Upload Signature Photo</label>
+        <input type="file" id="sigFile" accept="image/*" onchange="cleanSignature()">
+
+        <label>Threshold / Brightness Cutoff</label>
+        <input type="range" id="sigThreshold" min="100" max="240" value="180" oninput="cleanSignature()">
+
+        <label>Output File Format</label>
+        <select id="sigFormat">
+          <option value="image/png">PNG (Transparent Background)</option>
+          <option value="image/jpeg">JPG / JPEG (White Background)</option>
+          <option value="image/webp">WEBP</option>
+        </select>
+
+        <div class="btn-row">
+          <button class="btn-success" onclick="downloadCleanSignature()">Download Signature</button>
+          <button class="btn-secondary" onclick="resetSigCleaner()">Reset</button>
+        </div>
+      </div>
+      <div class="preview">
+        <canvas id="sigCanvas" style="display:none;"></canvas>
+        <div id="sigPlaceholder" class="placeholder">Upload signature image to preview</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 5. DOCUMENT SCANNER (B&W) -->
+  <div id="docScanner" class="tool-box">
+    <h2>Document B&W Scanner Effect</h2>
+    <div class="tool-layout">
+      <div class="controls">
+        <label>Upload Document Image</label>
+        <input type="file" id="docFile" accept="image/*" onchange="scanDocument()">
+
+        <label>Contrast Level</label>
+        <input type="range" id="docContrast" min="1" max="3" step="0.1" value="1.8" oninput="scanDocument()">
+
+        <div class="btn-row">
+          <button class="btn-success" onclick="downloadScannedDoc()">Download Document</button>
+          <button class="btn-secondary" onclick="resetDocScanner()">Reset</button>
+        </div>
+      </div>
+      <div class="preview">
+        <canvas id="docCanvas" style="display:none;"></canvas>
+        <div id="docPlaceholder" class="placeholder">Upload document image to preview</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 6. AGE CALCULATOR -->
+  <div id="age" class="tool-box">
+    <h2>Age Calculator</h2>
+    <div class="tool-layout">
+      <div class="controls">
+        <label>Date of Birth</label>
+        <input type="date" id="dob">
+
+        <label>Reference Date</label>
+        <input type="date" id="refDate">
+
+        <div class="btn-row">
+          <button onclick="calculateAge()">Calculate Age</button>
+          <button class="btn-secondary" onclick="resetAge()">Reset</button>
+        </div>
+        <div id="ageResult" class="result" style="display:none;"></div>
+      </div>
+      <div class="preview">
+        <div class="placeholder">Enter Date of Birth and Reference Date</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 7. TEXT CASE CONVERTER & WORD COUNTER -->
+  <div id="caseConverter" class="tool-box">
+    <h2>Text Case Converter & Word Counter</h2>
+    <div class="tool-layout">
+      <div class="controls">
+        <label>Enter / Paste Text</label>
+        <textarea id="textInput" rows="6" placeholder="Paste address or text here..." oninput="updateTextStats()"></textarea>
+
+        <div class="btn-row">
+          <button onclick="convertText('upper')">UPPERCASE</button>
+          <button onclick="convertText('lower')">lowercase</button>
+          <button onclick="convertText('title')">Title Case</button>
+          <button class="btn-secondary" onclick="resetTextConverter()">Reset</button>
+        </div>
+
+        <div class="stats-box" id="textStats">Characters: 0 | Words: 0</div>
+      </div>
+      <div class="preview">
+        <div class="placeholder">Form bharte waqt limited characters count check karne ke liye.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 8. COMPRESS PDF -->
+  <div id="compressPdf" class="tool-box">
+    <h2>Compress PDF File (Target Size)</h2>
+    <div class="tool-layout">
+      <div class="controls">
+        <label>Select PDF File</label>
+        <input type="file" id="compressFile" accept="application/pdf" onchange="previewCompressPdf(event)">
+
+        <label>Target File Size Limit</label>
+        <div class="unit-row">
+          <input type="number" id="targetSizeValue" placeholder="e.g. 200" min="1">
+          <select id="targetSizeUnit">
+            <option value="KB">KB</option>
+            <option value="MB">MB</option>
+          </select>
+        </div>
+
+        <label>Output File Format</label>
+        <select id="compressFormat">
+          <option value="application/pdf">PDF File (.pdf)</option>
+          <option value="image/jpeg">JPG Image (.jpg)</option>
+          <option value="image/webp">WEBP Image (.webp)</option>
+          <option value="image/png">PNG Image (.png)</option>
+        </select>
+
+        <div class="btn-row">
+          <button class="btn-success" onclick="processCompressPdf()">Compress & Download</button>
+          <button class="btn-secondary" onclick="resetCompressPdf()">Reset</button>
+        </div>
+      </div>
+      <div class="preview">
+        <canvas id="compressPreviewCanvas" style="display:none;"></canvas>
+        <div id="compressControls" class="pagination-controls" style="display:none;">
+          <button onclick="changePdfPage('compress', -1)">◀ Prev</button>
+          <span id="compressPageNum">Page 1 / 1</span>
+          <button onclick="changePdfPage('compress', 1)">Next ▶</button>
+        </div>
+        <div id="compressStatus" class="placeholder">PDF upload karein preview ke liye</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 9. IMAGE TO PDF WITH DYNAMIC PAGE SELECTION & PREVIEW -->
+  <div id="imgToPdf" class="tool-box">
+    <h2>Image to PDF Converter</h2>
+    <div class="tool-layout">
+      <div class="controls">
+        <label>Select Images (Multiple allowed)</label>
+        <input type="file" id="imgFiles" accept="image/*" multiple onchange="addImgToPdfFiles(event)">
+
+        <label>Paper Size</label>
+        <select id="pdfPaperSize" onchange="renderImgToPdfPreview()">
+          <option value="a4">A4 (210 x 297 mm)</option>
+          <option value="letter">Letter (8.5 x 11 in)</option>
+          <option value="legal">Legal (8.5 x 14 in)</option>
+          <option value="a3">A3 (297 x 420 mm)</option>
+          <option value="a5">A5 (148 x 210 mm)</option>
+          <option value="executive">Executive (7.25 x 10.5 in)</option>
+        </select>
+
+        <label>Page Orientation</label>
+        <select id="pdfPageOrientation" onchange="renderImgToPdfPreview()">
+          <option value="portrait">Portrait (Vertical)</option>
+          <option value="landscape">Landscape (Horizontal)</option>
+        </select>
+
+        <div class="btn-row">
+          <button class="btn-success" onclick="convertImgToPdf()">Convert & Download</button>
+          <button class="btn-secondary" onclick="resetImgToPdf()">Reset All</button>
+        </div>
+      </div>
+      <div class="preview" style="justify-content:flex-start;">
+        <canvas id="imgPreviewCanvas" style="display:none; margin-bottom:10px;"></canvas>
+        <div id="imgToPdfStatus" class="placeholder" style="margin-bottom:10px;">Select images to preview</div>
+        <div id="imgPdfListContainer" class="img-pdf-list"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 10. MERGE PDF -->
+  <div id="mergePdf" class="tool-box">
+    <h2>Merge PDF Files</h2>
+    <div class="tool-layout">
+      <div class="controls">
+        <label>Add PDF Files</label>
+        <input type="file" id="mergeFileInput" accept="application/pdf" multiple onchange="addMergeFiles(event)">
+
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="document.getElementById('mergeFileInput').click()">➕ Add PDF File(s)</button>
+          <button class="btn-danger" onclick="clearAllMergeFiles()">🗑️ Clear All</button>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-success" onclick="processMergePdf()" style="width:100%; margin-top:15px;">Merge & Download PDF</button>
+        </div>
+      </div>
+
+      <div class="preview" style="justify-content:flex-start;">
+        <div id="mergeStatus" class="placeholder" style="margin-bottom:15px;">Select PDF files to preview list</div>
+        <div id="mergeListContainer" class="pdf-merge-list"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 11. SPLIT PDF -->
+  <div id="splitPdf" class="tool-box">
+    <h2>Split / Extract Pages from PDF</h2>
+    <div class="tool-layout">
+      <div class="controls">
+        <label>Select PDF File</label>
+        <input type="file" id="splitFile" accept="application/pdf" onchange="loadPdfForSplit(event)">
+
+        <label>Page Range / Pages</label>
+        <input type="text" id="splitPages" placeholder="e.g. 1, 3-5">
+
+        <div class="btn-row">
+          <button class="btn-success" onclick="processSplitPdf()">Extract Pages</button>
+          <button class="btn-secondary" onclick="resetSplitPdf()">Reset</button>
+        </div>
+      </div>
+      <div class="preview">
+        <canvas id="splitPreviewCanvas" style="display:none;"></canvas>
+        <div id="splitControls" class="pagination-controls" style="display:none;">
+          <button onclick="changePdfPage('split', -1)">◀ Prev</button>
+          <span id="splitPageNum">Page 1 / 1</span>
+          <button onclick="changePdfPage('split', 1)">Next ▶</button>
+        </div>
+        <div id="splitStatus" class="placeholder">Upload PDF to preview pages</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12. 8 PASSPORT PHOTOS ON 4x6 SHEET -->
+<div id="passportGrid" class="tool-box">
+  <h2>8 Passport Photos (4x6 Canvas)</h2>
+  <div class="tool-layout">
+    <div class="controls">
+      <label>Upload Passport Photo</label>
+      <input type="file" id="passImgFile" accept="image/*" onchange="generatePassportGrid()">
+
+      <div class="checkbox-row">
+        <input type="checkbox" id="passBorderEnable" checked onchange="generatePassportGrid()">
+        <label style="margin:0;">Add Photo Border</label>
+      </div>
+
+      <label>Border Color</label>
+      <input type="color" id="passBorderColor" value="#cccccc" onchange="generatePassportGrid()">
+
+      <label>Border Width (PX)</label>
+      <input type="number" id="passBorderWidth" value="4" min="1" max="15" onchange="generatePassportGrid()">
+
+      <div class="btn-row">
+        <button class="btn-success" onclick="downloadPassportGrid()">Download 4x6 Sheet</button>
+        <button class="btn-secondary" onclick="resetPassportGrid()">Reset</button>
+      </div>
+    </div>
+    <div class="preview">
+      <canvas id="passportCanvas" style="display:none;"></canvas>
+      <div id="passPlaceholder" class="placeholder">Upload photo to generate 8-photo sheet</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+/* PAGINATION GLOBAL TRACKERS */
+let pdfStates = {
+  compress: { doc: null, page: 1, total: 0 },
+  split: { doc: null, page: 1, total: 0 }
+};
+
+/* GLOBAL TAB SWITCH & RESET ALL DATA FUNCTION */
+function openTool(id, card){
+  resetAllTools();
+
+  const boxes = document.querySelectorAll(".tool-box");
+  const cards = document.querySelectorAll(".tool-card");
+
+  boxes.forEach(b => b.classList.remove("active"));
+  cards.forEach(c => c.classList.remove("active"));
+
+  document.getElementById(id).classList.add("active");
+  card.classList.add("active");
+}
+
+function resetAllTools(){
+  resetResizer();
+  closeEditor();
+  resetPhotoDate();
+  resetSigCleaner();
+  resetDocScanner();
+  resetAge();
+  resetTextConverter();
+  resetCompressPdf();
+  resetImgToPdf();
+  clearAllMergeFiles();
+  resetSplitPdf();
+  resetPassportGrid();
+}
+
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* UNIVERSAL PDF RENDERER */
+async function loadAndInitPdfPreview(arrayBuffer, toolType) {
+  const status = document.getElementById(toolType + "Status");
+  const controls = document.getElementById(toolType + "Controls");
+
+  try {
+    const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    pdfStates[toolType].doc = pdfDoc;
+    pdfStates[toolType].page = 1;
+    pdfStates[toolType].total = pdfDoc.numPages;
+
+    await renderPdfPage(toolType, 1);
+
+    if (pdfDoc.numPages > 1) {
+      controls.style.display = "flex";
+      document.getElementById(toolType + "PageNum").innerText = `Page 1 / ${pdfDoc.numPages}`;
+    } else {
+      controls.style.display = "none";
+    }
+    status.innerHTML = `<strong>Total Pages:</strong> ${pdfDoc.numPages}`;
+  } catch(e) {
+    status.innerText = "Error previewing PDF file.";
+  }
+}
+
+async function renderPdfPage(toolType, pageNum) {
+  const state = pdfStates[toolType];
+  if (!state.doc) return;
+
+  const canvas = document.getElementById(toolType + "PreviewCanvas");
+  const ctx = canvas.getContext("2d");
+
+  const page = await state.doc.getPage(pageNum);
+  const viewport = page.getViewport({ scale: 0.8 });
+
+  canvas.width = viewport.width;
+  canvas.height = viewport.height;
+
+  await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+  canvas.style.display = "block";
+}
+
+async function changePdfPage(toolType, delta) {
+  const state = pdfStates[toolType];
+  if (!state.doc) return;
+
+  let newPage = state.page + delta;
+  if (newPage < 1 || newPage > state.total) return;
+
+  state.page = newPage;
+  await renderPdfPage(toolType, newPage);
+  document.getElementById(toolType + "PageNum").innerText = `Page ${newPage} / ${state.total}`;
+}
+
+/* 1. IMAGE RESIZER WITH EXACT TARGET KB BINARY SEARCH */
+let resizeImage = null;
+function loadResizeImage(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    const img = new Image();
+    img.onload = function(){
+      resizeImage = img;
+      document.getElementById("resizeWidth").value = img.width;
+      document.getElementById("resizeHeight").value = img.height;
+      showResizePreview();
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function showResizePreview(){
+  if(!resizeImage) return;
+  const canvas = document.getElementById("resizeCanvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = resizeImage.width;
+  canvas.height = resizeImage.height;
+  ctx.drawImage(resizeImage, 0, 0, canvas.width, canvas.height);
+  canvas.style.display = "block";
+  document.getElementById("resizePlaceholder").style.display = "none";
+  document.getElementById("resizeStatus").style.display = "none";
+}
+
+async function resizeDownload(){
+  if(!resizeImage) return alert("Please upload an image first.");
+  
+  let targetWidth = parseInt(document.getElementById("resizeWidth").value) || resizeImage.width;
+  let targetHeight = parseInt(document.getElementById("resizeHeight").value) || resizeImage.height;
+  const targetKB = parseFloat(document.getElementById("targetKB").value);
+  const format = document.getElementById("resizeFormat").value;
+  const statusDiv = document.getElementById("resizeStatus");
+
+  statusDiv.style.display = "block";
+  statusDiv.innerText = "Processing image...";
+
+  function getCanvasData(canvas, q) {
+    let url = canvas.toDataURL(format, q);
+    let head = "data:" + format + ";base64,";
+    let sizeBytes = Math.round((url.length - head.length) * 3 / 4);
+    return { dataUrl: url, kb: sizeBytes / 1024 };
+  }
+
+  let finalDataUrl = "";
+  let finalKB = 0;
+
+  if (targetKB && targetKB > 0) {
+    let scale = 1.0;
+    let bestResult = null;
+    let minDiff = Infinity;
+
+    for (let loop = 0; loop < 5; loop++) {
+      let curW = Math.round(targetWidth * scale);
+      let curH = Math.round(targetHeight * scale);
+
+      let canvas = document.createElement("canvas");
+      canvas.width = Math.max(curW, 10);
+      canvas.height = Math.max(curH, 10);
+      let ctx = canvas.getContext("2d");
+
+      if (format === "image/jpeg") {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+      ctx.drawImage(resizeImage, 0, 0, canvas.width, canvas.height);
+
+      let lowQ = 0.01, highQ = 0.98;
+      let passResult = getCanvasData(canvas, highQ);
+
+      if (passResult.kb <= targetKB) {
+        bestResult = passResult;
+        break; 
+      }
+
+      for (let i = 0; i < 12; i++) {
+        let midQ = (lowQ + highQ) / 2;
+        let res = getCanvasData(canvas, midQ);
+        let diff = Math.abs(res.kb - targetKB);
+
+        if (diff < minDiff && res.kb <= targetKB) {
+          minDiff = diff;
+          bestResult = res;
+        }
+
+        if (res.kb > targetKB) {
+          highQ = midQ;
+        } else {
+          lowQ = midQ;
+        }
+      }
+
+      if (bestResult && bestResult.kb <= targetKB && (targetKB - bestResult.kb) < (targetKB * 0.15)) {
+        break;
+      }
+
+      scale *= 0.8;
+    }
+
+    if (!bestResult) {
+      let canvas = document.createElement("canvas");
+      canvas.width = targetWidth; canvas.height = targetHeight;
+      let ctx = canvas.getContext("2d");
+      ctx.drawImage(resizeImage, 0, 0, targetWidth, targetHeight);
+      bestResult = getCanvasData(canvas, 0.5);
+    }
+
+    finalDataUrl = bestResult.dataUrl;
+    finalKB = bestResult.kb.toFixed(2);
+  } else {
+    let canvas = document.createElement("canvas");
+    canvas.width = targetWidth;
+    canvas.height = targetHeight;
+    let ctx = canvas.getContext("2d");
+    if (format === "image/jpeg") {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+    ctx.drawImage(resizeImage, 0, 0, targetWidth, targetHeight);
+    let res = getCanvasData(canvas, 0.92);
+    finalDataUrl = res.dataUrl;
+    finalKB = res.kb.toFixed(2);
+  }
+
+  statusDiv.innerText = `Final Size: ${finalKB} KB`;
+  downloadData(finalDataUrl, getExtension(format));
+}
+
+function getExtension(format){
+  if(format === "image/png") return "png";
+  if(format === "image/webp") return "webp";
+  return "jpg";
+}
+
+function downloadData(data, ext){
+  const link = document.createElement("a");
+  link.href = data;
+  link.download = "AK-Resized-Image." + ext;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function resetResizer(){
+  resizeImage = null;
+  document.getElementById("resizeFile").value = "";
+  document.getElementById("targetKB").value = "";
+  document.getElementById("resizeWidth").value = "";
+  document.getElementById("resizeHeight").value = "";
+  document.getElementById("resizeCanvas").style.display = "none";
+  document.getElementById("resizePlaceholder").style.display = "block";
+  document.getElementById("resizeStatus").style.display = "none";
+}
+
+/* 2. ADVANCED IMAGE EDITOR & CROP */
+let editorImage = null;
+let originalEditorImage = null;
+let signatureImage = null;
+
+let isDragging = false;
+let startX = 0, startY = 0;
+let currentX = 0, currentY = 0;
+
+const editorCanvas = document.getElementById("editorCanvas");
+const editorCtx = editorCanvas.getContext("2d");
+
+function loadEditorImage(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    const img = new Image();
+    img.onload = function(){
+      editorImage = img;
+      originalEditorImage = img;
+      document.getElementById("editorWidth").value = img.width;
+      document.getElementById("editorHeight").value = img.height;
+      editorCanvas.style.display = "block";
+      document.getElementById("editorPlaceholder").style.display = "none";
+      resetEditorControlsOnly();
+      renderEditor();
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function resetEditorControlsOnly(){
+  document.getElementById("brightness").value = 100;
+  document.getElementById("contrast").value = 100;
+  document.getElementById("saturation").value = 100;
+  document.getElementById("sharpness").value = 0;
+  document.getElementById("brightnessValue").innerText = "100";
+  document.getElementById("contrastValue").innerText = "100";
+  document.getElementById("saturationValue").innerText = "100";
+  document.getElementById("sharpnessValue").innerText = "0";
+  document.getElementById("borderEnable").checked = false;
+  document.getElementById("borderColor").value = "#000000";
+  document.getElementById("borderWidth").value = 2;
+  signatureImage = null;
+  document.getElementById("signatureFile").value = "";
+}
+
+function exactResize(){
+  if(!editorImage) return alert("Please upload an image first.");
+  const width = parseInt(document.getElementById("editorWidth").value);
+  const height = parseInt(document.getElementById("editorHeight").value);
+
+  if(!width || !height || width <= 0 || height <= 0) return alert("Please enter valid Width and Height.");
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(editorImage, 0, 0, width, height);
+
+  const img = new Image();
+  img.onload = function(){
+    editorImage = img;
+    document.getElementById("editorWidth").value = width;
+    document.getElementById("editorHeight").value = height;
+    renderEditor();
+  };
+  img.src = canvas.toDataURL("image/png");
+}
+
+function renderEditor(){
+  if(!editorImage) return;
+  const brightness = document.getElementById("brightness").value;
+  const contrast = document.getElementById("contrast").value;
+  const saturation = document.getElementById("saturation").value;
+  const sharpness = parseFloat(document.getElementById("sharpness").value);
+
+  document.getElementById("brightnessValue").innerText = brightness;
+  document.getElementById("contrastValue").innerText = contrast;
+  document.getElementById("saturationValue").innerText = saturation;
+  document.getElementById("sharpnessValue").innerText = sharpness;
+
+  editorCanvas.width = editorImage.width;
+  editorCanvas.height = editorImage.height;
+
+  editorCtx.clearRect(0, 0, editorCanvas.width, editorCanvas.height);
+  editorCtx.filter = `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%)`;
+  editorCtx.drawImage(editorImage, 0, 0, editorCanvas.width, editorCanvas.height);
+  editorCtx.filter = "none";
+
+  if(sharpness > 0) applySharpness(sharpness);
+  if(signatureImage) drawSignatureOnCanvas();
+  drawBorder();
+}
+
+function applySharpness(amount){
+  const w = editorCanvas.width;
+  const h = editorCanvas.height;
+  const imageData = editorCtx.getImageData(0,0,w,h);
+  const src = imageData.data;
+  const output = editorCtx.createImageData(w,h);
+  const dst = output.data;
+
+  for(let y=1; y<h-1; y++){
+    for(let x=1; x<w-1; x++){
+      const index = (y*w+x)*4;
+      for(let c=0; c<3; c++){
+        const center = src[index+c];
+        const top = src[((y-1)*w+x)*4+c];
+        const bottom = src[((y+1)*w+x)*4+c];
+        const left = src[(y*w+x-1)*4+c];
+        const right = src[(y*w+x+1)*4+c];
+        let val = center + amount * (4*center-top-bottom-left-right);
+        dst[index+c] = Math.max(0,Math.min(255,val));
+      }
+      dst[index+3] = src[index+3];
+    }
+  }
+  editorCtx.putImageData(output,0,0);
+}
+
+function loadSignature(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    const img = new Image();
+    img.onload = function(){
+      signatureImage = img;
+      renderEditor();
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function drawSignatureOnCanvas(){
+  if(!signatureImage) return;
+  const canvasWidth = editorCanvas.width;
+  const canvasHeight = editorCanvas.height;
+  const stripHeight = Math.max(80, Math.round(canvasHeight * 0.18));
+  const stripY = canvasHeight - stripHeight;
+
+  editorCtx.save();
+  editorCtx.fillStyle = "#ffffff";
+  editorCtx.fillRect(0, stripY, canvasWidth, stripHeight);
+  editorCtx.restore();
+
+  const temp = document.createElement("canvas");
+  temp.width = signatureImage.width;
+  temp.height = signatureImage.height;
+  const tempCtx = temp.getContext("2d");
+  tempCtx.drawImage(signatureImage, 0, 0);
+
+  const data = tempCtx.getImageData(0, 0, temp.width, temp.height);
+  const pixels = data.data;
+
+  for(let i=0; i<pixels.length; i+=4){
+    const brightness = (pixels[i] + pixels[i+1] + pixels[i+2]) / 3;
+    if(brightness < 225){
+      pixels[i] = 0; pixels[i+1] = 0; pixels[i+2] = 0; pixels[i+3] = 255;
+    } else {
+      pixels[i+3] = 0;
+    }
+  }
+  tempCtx.putImageData(data, 0, 0);
+
+  const maxWidth = canvasWidth * 0.88;
+  const maxHeight = stripHeight * 0.75;
+  const scale = Math.min(maxWidth / temp.width, maxHeight / temp.height);
+  const sigWidth = temp.width * scale;
+  const sigHeight = temp.height * scale;
+
+  editorCtx.drawImage(temp, (canvasWidth - sigWidth) / 2, stripY + (stripHeight - sigHeight) / 2, sigWidth, sigHeight);
+}
+
+function drawBorder(){
+  if(!document.getElementById("borderEnable").checked) return;
+  const color = document.getElementById("borderColor").value;
+  let width = parseInt(document.getElementById("borderWidth").value) || 1;
+
+  editorCtx.save();
+  editorCtx.strokeStyle = color;
+  editorCtx.lineWidth = width;
+  editorCtx.strokeRect(width/2, width/2, editorCanvas.width-width, editorCanvas.height-width);
+  editorCtx.restore();
+}
+
+function updateEditor(){
+  if(editorImage) renderEditor();
+}
+
+function getCanvasMousePos(e) {
+  const rect = editorCanvas.getBoundingClientRect();
+  const scaleX = editorCanvas.width / rect.width;
+  const scaleY = editorCanvas.height / rect.height;
+
+  return {
+    x: (e.clientX - rect.left) * scaleX,
+    y: (e.clientY - rect.top) * scaleY
+  };
+}
+
+editorCanvas.addEventListener("mousedown", function(e){
+  if(!editorImage) return;
+  isDragging = true;
+  const pos = getCanvasMousePos(e);
+  startX = pos.x;
+  startY = pos.y;
+  currentX = pos.x;
+  currentY = pos.y;
+});
+
+editorCanvas.addEventListener("mousemove", function(e){
+  if(!isDragging || !editorImage) return;
+  const pos = getCanvasMousePos(e);
+  currentX = pos.x;
+  currentY = pos.y;
+
+  renderEditor();
+
+  editorCtx.save();
+  editorCtx.strokeStyle = "#dc3545";
+  editorCtx.lineWidth = 3;
+  editorCtx.setLineDash([6, 4]);
+
+  const x = Math.min(startX, currentX);
+  const y = Math.min(startY, currentY);
+  const w = Math.abs(currentX - startX);
+  const h = Math.abs(currentY - startY);
+
+  editorCtx.strokeRect(x, y, w, h);
+  editorCtx.fillStyle = "rgba(220, 53, 69, 0.15)";
+  editorCtx.fillRect(x, y, w, h);
+  editorCtx.restore();
+});
+
+window.addEventListener("mouseup", function(e){
+  if(!isDragging || !editorImage) return;
+  isDragging = false;
+
+  const x = Math.min(startX, currentX);
+  const y = Math.min(startY, currentY);
+  const w = Math.abs(currentX - startX);
+  const h = Math.abs(currentY - startY);
+
+  if(w > 15 && h > 15) {
+    applyMouseCrop(x, y, w, h);
+  } else {
+    renderEditor();
+  }
+});
+
+function applyMouseCrop(x, y, width, height){
+  const tempCanvas = document.createElement("canvas");
+  tempCanvas.width = Math.round(width);
+  tempCanvas.height = Math.round(height);
+  const ctx = tempCanvas.getContext("2d");
+
+  ctx.drawImage(editorCanvas, x, y, width, height, 0, 0, tempCanvas.width, tempCanvas.height);
+
+  const img = new Image();
+  img.onload = function(){
+    editorImage = img;
+    document.getElementById("editorWidth").value = tempCanvas.width;
+    document.getElementById("editorHeight").value = tempCanvas.height;
+    renderEditor();
+  };
+  img.src = tempCanvas.toDataURL("image/png");
+}
+
+function resetEditor(){
+  if(!originalEditorImage) return alert("No image to reset.");
+  editorImage = originalEditorImage;
+  document.getElementById("editorWidth").value = originalEditorImage.width;
+  document.getElementById("editorHeight").value = originalEditorImage.height;
+  resetEditorControlsOnly();
+  renderEditor();
+}
+
+function closeEditor(){
+  editorImage = null; originalEditorImage = null; signatureImage = null;
+  isDragging = false;
+  document.getElementById("editorFile").value = "";
+  document.getElementById("signatureFile").value = "";
+  document.getElementById("editorWidth").value = "";
+  document.getElementById("editorHeight").value = "";
+  resetEditorControlsOnly();
+
+  editorCanvas.width = 1; editorCanvas.height = 1;
+  editorCtx.clearRect(0, 0, 1, 1);
+  editorCanvas.style.display = "none";
+  document.getElementById("editorPlaceholder").style.display = "block";
+}
+
+function downloadEditor(){
+  if(!editorImage) return alert("Please upload an image first.");
+  renderEditor();
+  const format = document.getElementById("editorFormat").value;
+  const ext = getExtension(format);
+
+  let finalCanvas = editorCanvas;
+  if(format === "image/jpeg"){
+    finalCanvas = document.createElement("canvas");
+    finalCanvas.width = editorCanvas.width;
+    finalCanvas.height = editorCanvas.height;
+    const ctx = finalCanvas.getContext("2d");
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0,0,finalCanvas.width,finalCanvas.height);
+    ctx.drawImage(editorCanvas, 0, 0);
+  }
+
+  const link = document.createElement("a");
+  link.href = finalCanvas.toDataURL(format, 0.92);
+  link.download = "AK-Edited-Image." + ext;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+/* 3. PHOTO WITH DATE */
+let pPhotoImg = null;
+function renderPhotoWithDate(){
+  const file = document.getElementById("pPhotoFile").files[0];
+  if(!file && !pPhotoImg) return;
+
+  const name = document.getElementById("pName").value.trim();
+  const dateVal = document.getElementById("pDate").value;
+
+  const canvas = document.getElementById("photoDateCanvas");
+  const ctx = canvas.getContext("2d");
+
+  const processImage = (img) => {
+    canvas.width = img.width;
+    canvas.height = img.height;
+    ctx.drawImage(img, 0, 0);
+
+    if(name || dateVal){
+      const stripHeight = Math.max(60, Math.round(canvas.height * 0.20));
+      const stripY = canvas.height - stripHeight;
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, stripY, canvas.width, stripHeight);
+      ctx.fillStyle = "#000000";
+      ctx.textAlign = "center";
+      
+      const fontSize = Math.max(14, Math.round(stripHeight * 0.32));
+      ctx.font = `bold ${fontSize}px Arial`;
+
+      let line1 = name ? name.toUpperCase() : "";
+      let line2 = dateVal ? "DOP: " + dateVal.split("-").reverse().join("-") : "";
+
+      if(line1 && line2){
+        ctx.fillText(line1, canvas.width / 2, stripY + (stripHeight * 0.4));
+        ctx.fillText(line2, canvas.width / 2, stripY + (stripHeight * 0.8));
+      } else {
+        ctx.fillText(line1 || line2, canvas.width / 2, stripY + (stripHeight * 0.6));
+      }
+    }
+    canvas.style.display = "block";
+    document.getElementById("pDatePlaceholder").style.display = "none";
+  };
+
+  if(file && (!pPhotoImg || pPhotoImg.fileRef !== file)){
+    const reader = new FileReader();
+    reader.onload = function(e){
+      const img = new Image();
+      img.onload = function(){
+        pPhotoImg = img;
+        pPhotoImg.fileRef = file;
+        processImage(img);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  } else if(pPhotoImg){
+    processImage(pPhotoImg);
+  }
+}
+
+function downloadPhotoWithDate(){
+  const canvas = document.getElementById("photoDateCanvas");
+  if(canvas.style.display === "none") return alert("Please upload photo first.");
+  const a = document.createElement("a");
+  a.href = canvas.toDataURL("image/jpeg", 0.95);
+  a.download = "AK-Photo-With-Date.jpg";
+  a.click();
+}
+
+function resetPhotoDate(){
+  pPhotoImg = null;
+  document.getElementById("pPhotoFile").value = "";
+  document.getElementById("pName").value = "";
+  document.getElementById("pDate").value = "";
+  document.getElementById("photoDateCanvas").style.display = "none";
+  document.getElementById("pDatePlaceholder").style.display = "block";
+}
+
+/* 4. SIGNATURE CLEANER */
+let rawSigImg = null;
+function cleanSignature(){
+  const file = document.getElementById("sigFile").files[0];
+  if(!file && !rawSigImg) return;
+
+  const threshold = parseInt(document.getElementById("sigThreshold").value);
+  const canvas = document.getElementById("sigCanvas");
+  const ctx = canvas.getContext("2d");
+
+  const process = (img) => {
+    canvas.width = img.width;
+    canvas.height = img.height;
+    ctx.drawImage(img, 0, 0);
+
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imgData.data;
+
+    for (let i = 0; i < data.length; i += 4) {
+      let avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+      if (avg > threshold) {
+        data[i + 3] = 0;
+      } else {
+        data[i] = 0; data[i + 1] = 0; data[i + 2] = 0;
+      }
+    }
+    ctx.putImageData(imgData, 0, 0);
+    canvas.style.display = "block";
+    document.getElementById("sigPlaceholder").style.display = "none";
+  };
+
+  if(file && (!rawSigImg || rawSigImg.fileRef !== file)){
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => { rawSigImg = img; rawSigImg.fileRef = file; process(img); };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  } else if(rawSigImg) {
+    process(rawSigImg);
+  }
+}
+
+function downloadCleanSignature(){
+  const canvas = document.getElementById("sigCanvas");
+  if(canvas.style.display === "none") return alert("Upload signature photo first.");
+
+  const format = document.getElementById("sigFormat").value;
+  const ext = getExtension(format);
+
+  let finalCanvas = canvas;
+  if(format === "image/jpeg"){
+    finalCanvas = document.createElement("canvas");
+    finalCanvas.width = canvas.width;
+    finalCanvas.height = canvas.height;
+    const ctx = finalCanvas.getContext("2d");
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
+    ctx.drawImage(canvas, 0, 0);
+  }
+
+  const a = document.createElement("a");
+  a.href = finalCanvas.toDataURL(format, 0.95);
+  a.download = "AK-Clean-Signature." + ext;
+  a.click();
+}
+
+function resetSigCleaner(){
+  rawSigImg = null;
+  document.getElementById("sigFile").value = "";
+  document.getElementById("sigThreshold").value = 180;
+  document.getElementById("sigCanvas").style.display = "none";
+  document.getElementById("sigPlaceholder").style.display = "block";
+}
+
+/* 5. DOCUMENT SCANNER */
+let rawDocImg = null;
+function scanDocument(){
+  const file = document.getElementById("docFile").files[0];
+  if(!file && !rawDocImg) return;
+
+  const contrast = parseFloat(document.getElementById("docContrast").value);
+  const canvas = document.getElementById("docCanvas");
+  const ctx = canvas.getContext("2d");
+
+  const process = (img) => {
+    canvas.width = img.width;
+    canvas.height = img.height;
+    ctx.drawImage(img, 0, 0);
+
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imgData.data;
+
+    for (let i = 0; i < data.length; i += 4) {
+      let gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+      gray = (gray - 128) * contrast + 128;
+      gray = Math.max(0, Math.min(255, gray));
+      data[i] = gray; data[i + 1] = gray; data[i + 2] = gray;
+    }
+    ctx.putImageData(imgData, 0, 0);
+    canvas.style.display = "block";
+    document.getElementById("docPlaceholder").style.display = "none";
+  };
+
+  if(file && (!rawDocImg || rawDocImg.fileRef !== file)){
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => { rawDocImg = img; rawDocImg.fileRef = file; process(img); };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  } else if(rawDocImg) {
+    process(rawDocImg);
+  }
+}
+
+function downloadScannedDoc(){
+  const canvas = document.getElementById("docCanvas");
+  if(canvas.style.display === "none") return alert("Upload document first.");
+  const a = document.createElement("a");
+  a.href = canvas.toDataURL("image/jpeg", 0.9);
+  a.download = "AK-Scanned-Document.jpg";
+  a.click();
+}
+
+function resetDocScanner(){
+  rawDocImg = null;
+  document.getElementById("docFile").value = "";
+  document.getElementById("docContrast").value = 1.8;
+  document.getElementById("docCanvas").style.display = "none";
+  document.getElementById("docPlaceholder").style.display = "block";
+}
+
+/* 6. AGE CALCULATOR */
+function calculateAge(){
+  const dobValue = document.getElementById("dob").value;
+  const refValue = document.getElementById("refDate").value;
+
+  if(!dobValue || !refValue) return alert("Please select both dates.");
+
+  const dob = new Date(dobValue + "T00:00:00");
+  const ref = new Date(refValue + "T00:00:00");
+
+  if(ref < dob) return alert("Reference Date cannot be before Date of Birth.");
+
+  let years = ref.getFullYear() - dob.getFullYear();
+  let months = ref.getMonth() - dob.getMonth();
+  let days = ref.getDate() - dob.getDate();
+
+  if(days < 0){
+    months--;
+    const previousMonth = new Date(ref.getFullYear(), ref.getMonth(), 0);
+    days += previousMonth.getDate();
+  }
+  if(months < 0){
+    years--;
+    months += 12;
+  }
+
+  const totalDays = Math.floor((ref - dob) / (1000 * 60 * 60 * 24));
+  const result = document.getElementById("ageResult");
+
+  result.style.display = "block";
+  result.innerHTML = `Age: ${years} Years, ${months} Months, ${days} Days<br><br>Total Days: ${totalDays.toLocaleString()}`;
+}
+
+function resetAge(){
+  document.getElementById("dob").value = "";
+  document.getElementById("refDate").value = "";
+  const result = document.getElementById("ageResult");
+  result.style.display = "none";
+  result.innerHTML = "";
+}
+
+/* 7. TEXT CASE CONVERTER */
+function updateTextStats(){
+  const txt = document.getElementById("textInput").value;
+  const chars = txt.length;
+  const words = txt.trim() ? txt.trim().split(/\s+/).length : 0;
+  document.getElementById("textStats").innerText = `Characters: ${chars} | Words: ${words}`;
+}
+
+function convertText(type){
+  const el = document.getElementById("textInput");
+  if(type === 'upper') el.value = el.value.toUpperCase();
+  if(type === 'lower') el.value = el.value.toLowerCase();
+  if(type === 'title') el.value = el.value.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
+  updateTextStats();
+}
+
+function resetTextConverter(){
+  document.getElementById("textInput").value = "";
+  updateTextStats();
+}
+
+/* 8. COMPRESS PDF */
+let compressPdfBuffer = null;
+async function previewCompressPdf(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  compressPdfBuffer = await file.arrayBuffer();
+  loadAndInitPdfPreview(compressPdfBuffer, "compress");
+}
+
+async function processCompressPdf() {
+  const fileInput = document.getElementById("compressFile");
+  const sizeVal = parseFloat(document.getElementById("targetSizeValue").value);
+  const unit = document.getElementById("targetSizeUnit").value;
+  const format = document.getElementById("compressFormat").value;
+  const status = document.getElementById("compressStatus");
+
+  if (!fileInput.files[0] || !compressPdfBuffer) return alert("Select a PDF file first.");
+
+  let targetKB = sizeVal && sizeVal > 0 ? (unit === "MB" ? sizeVal * 1024 : sizeVal) : 0;
+  status.innerText = "Processing PDF, please wait...";
+
+  const pdfDoc = await pdfjsLib.getDocument({ data: compressPdfBuffer }).promise;
+  const numPages = pdfDoc.numPages;
+
+  if (format !== "application/pdf") {
+    for (let i = 1; i <= numPages; i++) {
+      const page = await pdfDoc.getPage(i);
+      const viewport = page.getViewport({ scale: 1.5 });
+      const canvas = document.createElement("canvas");
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+      const ctx = canvas.getContext("2d");
+
+      if (format === "image/jpeg") {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+
+      await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+      const dataUrl = canvas.toDataURL(format, 0.85);
+
+      const ext = getExtension(format);
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = `AK-Page-${i}.${ext}`;
+      a.click();
+    }
+    status.innerText = `Exported ${numPages} image(s) successfully!`;
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  let quality = 0.7;
+  let scale = 1.0;
+  if (targetKB > 0 && targetKB < 300) { quality = 0.4; scale = 0.8; }
+
+  let finalPdfBytes = null;
+  for (let attempt = 0; attempt < 5; attempt++) {
+    let outPdf = null;
+    for (let i = 1; i <= numPages; i++) {
+      const page = await pdfDoc.getPage(i);
+      const viewport = page.getViewport({ scale: scale });
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+
+      await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+      const imgData = canvas.toDataURL("image/jpeg", quality);
+
+      if (i === 1) {
+        outPdf = new jsPDF({ orientation: viewport.width > viewport.height ? 'l' : 'p', unit: 'px', format: [viewport.width, viewport.height] });
+        outPdf.addImage(imgData, 'JPEG', 0, 0, viewport.width, viewport.height);
+      } else {
+        outPdf.addPage([viewport.width, viewport.height], viewport.width > viewport.height ? 'l' : 'p');
+        outPdf.addImage(imgData, 'JPEG', 0, 0, viewport.width, viewport.height);
+      }
+    }
+
+    const pdfOutput = outPdf.output("arraybuffer");
+    const generatedKB = Math.round(pdfOutput.byteLength / 1024);
+    finalPdfBytes = pdfOutput;
+
+    if (!targetKB || generatedKB <= targetKB || quality <= 0.15) {
+      status.innerText = `Done! Compressed Size: ${generatedKB} KB`;
+      break;
+    }
+    quality -= 0.15;
+    scale *= 0.85;
+  }
+
+  downloadBlob(new Blob([finalPdfBytes], { type: "application/pdf" }), "AK-Compressed.pdf");
+}
+
+function resetCompressPdf() {
+  compressPdfBuffer = null;
+  pdfStates.compress = { doc: null, page: 1, total: 0 };
+  document.getElementById("compressFile").value = "";
+  document.getElementById("targetSizeValue").value = "";
+  document.getElementById("compressPreviewCanvas").style.display = "none";
+  document.getElementById("compressControls").style.display = "none";
+  document.getElementById("compressStatus").innerText = "PDF upload karein preview ke liye";
+}
+
+/* 9. IMAGE TO PDF WITH DYNAMIC SELECTION, REORDERING & CANVAS PREVIEW */
+let imgToPdfList = [];
+let activePreviewIndex = 0;
+
+async function addImgToPdfFiles(event) {
+  const files = Array.from(event.target.files);
+  if (!files.length) return;
+
+  for (let file of files) {
+    const dataUrl = await new Promise((res) => {
+      const r = new FileReader();
+      r.onload = (e) => res(e.target.result);
+      r.readAsDataURL(file);
+    });
+
+    const img = new Image();
+    await new Promise((res) => { img.onload = res; img.src = dataUrl; });
+
+    imgToPdfList.push({
+      id: Date.now() + Math.random(),
+      dataUrl: dataUrl,
+      width: img.width,
+      height: img.height,
+      name: file.name
+    });
+  }
+
+  document.getElementById("imgFiles").value = "";
+  renderImgPdfList();
+}
+
+function removeImgPdfItem(index) {
+  imgToPdfList.splice(index, 1);
+  if (activePreviewIndex >= imgToPdfList.length) {
+    activePreviewIndex = Math.max(0, imgToPdfList.length - 1);
+  }
+  renderImgPdfList();
+}
+
+function moveImgPdfItem(index, direction) {
+  let targetIndex = index + direction;
+  if (targetIndex < 0 || targetIndex >= imgToPdfList.length) return;
+
+  let temp = imgToPdfList[index];
+  imgToPdfList[index] = imgToPdfList[targetIndex];
+  imgToPdfList[targetIndex] = temp;
+
+  activePreviewIndex = targetIndex;
+  renderImgPdfList();
+}
+
+function selectPreviewImage(index) {
+  activePreviewIndex = index;
+  renderImgPdfList();
+}
+
+function renderImgPdfList() {
+  const container = document.getElementById("imgPdfListContainer");
+  const status = document.getElementById("imgToPdfStatus");
+
+  container.innerHTML = "";
+
+  if (imgToPdfList.length === 0) {
+    status.innerText = "Select images to preview";
+    document.getElementById("imgPreviewCanvas").style.display = "none";
+    return;
+  }
+
+  status.innerHTML = `<strong>Total Pages:</strong> ${imgToPdfList.length} | <strong>Viewing Page:</strong> ${activePreviewIndex + 1}`;
+
+  imgToPdfList.forEach((item, idx) => {
+    const card = document.createElement("div");
+    card.className = "img-pdf-card" + (idx === activePreviewIndex ? " selected" : "");
+    card.onclick = () => selectPreviewImage(idx);
+
+    card.innerHTML = `
+      <img src="${item.dataUrl}" alt="Page ${idx + 1}">
+      <div class="page-badge">Page ${idx + 1}</div>
+      <div class="img-pdf-actions" onclick="event.stopPropagation()">
+        <button class="btn-secondary" onclick="moveImgPdfItem(${idx}, -1)" ${idx === 0 ? 'disabled' : ''}>▲</button>
+        <button class="btn-secondary" onclick="moveImgPdfItem(${idx}, 1)" ${idx === imgToPdfList.length - 1 ? 'disabled' : ''}>▼</button>
+        <button class="btn-danger" onclick="removeImgPdfItem(${idx})">✖</button>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+
+  renderImgToPdfPreview();
+}
+
+function renderImgToPdfPreview() {
+  if (imgToPdfList.length === 0) return;
+
+  const canvas = document.getElementById("imgPreviewCanvas");
+  const ctx = canvas.getContext("2d");
+  const paperSizeKey = document.getElementById("pdfPaperSize").value;
+  const orientation = document.getElementById("pdfPageOrientation").value;
+  const isLandscape = orientation === "landscape";
+
+  const paperDimensions = {
+    a4: [595.28, 841.89],
+    letter: [612.00, 792.00],
+    legal: [612.00, 1008.00],
+    a3: [841.89, 1190.55],
+    a5: [419.53, 595.28],
+    executive: [522.00, 756.00]
+  };
+
+  let dim = paperDimensions[paperSizeKey] || paperDimensions.a4;
+  let baseWidth = dim[0];
+  let baseHeight = dim[1];
+
+  let pageWidth = isLandscape ? Math.max(baseWidth, baseHeight) : Math.min(baseWidth, baseHeight);
+  let pageHeight = isLandscape ? Math.min(baseWidth, baseHeight) : Math.max(baseWidth, baseHeight);
+
+  // Canvas scaling for screen rendering preview
+  const scale = 0.5;
+  canvas.width = pageWidth * scale;
+  canvas.height = pageHeight * scale;
+
+  // Draw Page (Paper background with drop shadow effect)
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const activeItem = imgToPdfList[activePreviewIndex];
+  if (!activeItem) return;
+
+  const img = new Image();
+  img.onload = () => {
+    const imgRatio = img.width / img.height;
+    const margin = 20 * scale;
+    const availW = canvas.width - (margin * 2);
+    const availH = canvas.height - (margin * 2);
+    const pageRatio = availW / availH;
+
+    let renderW, renderH;
+    if (imgRatio > pageRatio) {
+      renderW = availW;
+      renderH = renderW / imgRatio;
+    } else {
+      renderH = availH;
+      renderW = renderH * imgRatio;
+    }
+
+    const x = (canvas.width - renderW) / 2;
+    const y = (canvas.height - renderH) / 2;
+
+    ctx.drawImage(img, x, y, renderW, renderH);
+    canvas.style.display = "block";
+  };
+  img.src = activeItem.dataUrl;
+}
+
+async function convertImgToPdf() {
+  if (imgToPdfList.length === 0) return alert("Select at least one image.");
+
+  const { jsPDF } = window.jspdf;
+  const orientation = document.getElementById("pdfPageOrientation").value;
+  const paperSizeKey = document.getElementById("pdfPaperSize").value;
+  const isLandscape = orientation === "landscape";
+
+  const paperDimensions = {
+    a4: [595.28, 841.89],
+    letter: [612.00, 792.00],
+    legal: [612.00, 1008.00],
+    a3: [841.89, 1190.55],
+    a5: [419.53, 595.28],
+    executive: [522.00, 756.00]
+  };
+
+  let dim = paperDimensions[paperSizeKey] || paperDimensions.a4;
+  let baseWidth = dim[0];
+  let baseHeight = dim[1];
+
+  let pageWidth = isLandscape ? Math.max(baseWidth, baseHeight) : Math.min(baseWidth, baseHeight);
+  let pageHeight = isLandscape ? Math.min(baseWidth, baseHeight) : Math.max(baseWidth, baseHeight);
+
+  let doc = new jsPDF({ 
+    orientation: isLandscape ? 'l' : 'p', 
+    unit: 'pt', 
+    format: [pageWidth, pageHeight] 
+  });
+
+  for (let i = 0; i < imgToPdfList.length; i++) {
+    const item = imgToPdfList[i];
+    const imgRatio = item.width / item.height;
+    const margin = 20;
+    const availW = pageWidth - (margin * 2);
+    const availH = pageHeight - (margin * 2);
+    const pageRatio = availW / availH;
+
+    let renderW, renderH;
+    if (imgRatio > pageRatio) {
+      renderW = availW;
+      renderH = renderW / imgRatio;
+    } else {
+      renderH = availH;
+      renderW = renderH * imgRatio;
+    }
+
+    const x = (pageWidth - renderW) / 2;
+    const y = (pageHeight - renderH) / 2;
+
+    if (i > 0) {
+      doc.addPage([pageWidth, pageHeight], isLandscape ? 'l' : 'p');
+    }
+    doc.addImage(item.dataUrl, 'JPEG', x, y, renderW, renderH);
+  }
+  doc.save("AK-Images.pdf");
+}
+
+function resetImgToPdf() {
+  imgToPdfList = [];
+  activePreviewIndex = 0;
+  document.getElementById("imgFiles").value = "";
+  document.getElementById("pdfPaperSize").value = "a4";
+  document.getElementById("pdfPageOrientation").value = "portrait";
+  document.getElementById("imgPreviewCanvas").style.display = "none";
+  document.getElementById("imgPdfListContainer").innerHTML = "";
+  document.getElementById("imgToPdfStatus").innerText = "Select images to preview";
+}
+
+/* 10. MERGE PDF */
+let mergeFileList = [];
+
+async function addMergeFiles(event) {
+  const files = Array.from(event.target.files);
+  if (!files.length) return;
+
+  for (let file of files) {
+    const buffer = await file.arrayBuffer();
+    mergeFileList.push({
+      id: Date.now() + Math.random(),
+      file: file,
+      buffer: buffer
+    });
+  }
+  document.getElementById("mergeFileInput").value = "";
+  renderMergeList();
+}
+
+function removeMergeFile(id) {
+  mergeFileList = mergeFileList.filter(item => item.id !== id);
+  renderMergeList();
+}
+
+function clearAllMergeFiles() {
+  mergeFileList = [];
+  renderMergeList();
+}
+
+async function renderMergeList() {
+  const container = document.getElementById("mergeListContainer");
+  const status = document.getElementById("mergeStatus");
+  container.innerHTML = "";
+
+  if (mergeFileList.length === 0) {
+    status.innerText = "Select PDF files to preview list";
+    return;
+  }
+
+  status.innerHTML = `<strong>Total Files:</strong> ${mergeFileList.length}`;
+
+  for (let index = 0; index < mergeFileList.length; index++) {
+    const item = mergeFileList[index];
+    const itemDiv = document.createElement("div");
+    itemDiv.className = "pdf-item";
+
+    const infoDiv = document.createElement("div");
+    infoDiv.className = "pdf-item-info";
+
+    const canvas = document.createElement("canvas");
+    infoDiv.appendChild(canvas);
+
+    const titleSpan = document.createElement("span");
+    titleSpan.innerHTML = `<b>${index + 1}.</b> ${item.file.name}`;
+    infoDiv.appendChild(titleSpan);
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "btn-danger";
+    deleteBtn.innerText = "✖ Remove";
+    deleteBtn.onclick = () => removeMergeFile(item.id);
+
+    itemDiv.appendChild(infoDiv);
+    itemDiv.appendChild(deleteBtn);
+    container.appendChild(itemDiv);
+
+    try {
+      const pdfDoc = await pdfjsLib.getDocument({ data: item.buffer.slice(0) }).promise;
+      const page = await pdfDoc.getPage(1);
+      const viewport = page.getViewport({ scale: 0.2 });
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+      const ctx = canvas.getContext("2d");
+      await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+    } catch(e) {
+      console.error("Preview render failed", e);
+    }
+  }
+}
+
+async function processMergePdf() {
+  if (mergeFileList.length < 2) return alert("Please add at least 2 PDF files to merge.");
+
+  const mergedPdf = await PDFLib.PDFDocument.create();
+  for (let item of mergeFileList) {
+    const pdfDoc = await PDFLib.PDFDocument.load(item.buffer);
+    const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+    copiedPages.forEach((page) => mergedPdf.addPage(page));
+  }
+  const pdfBytes = await mergedPdf.save();
+  downloadBlob(new Blob([pdfBytes], { type: "application/pdf" }), "AK-Merged.pdf");
+}
+
+/* 11. SPLIT PDF */
+let loadedSplitPdfDoc = null;
+async function loadPdfForSplit(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const arrayBuffer = await file.arrayBuffer();
+  loadedSplitPdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+  loadAndInitPdfPreview(arrayBuffer, "split");
+}
+
+async function processSplitPdf() {
+  const rangeInput = document.getElementById("splitPages").value.trim();
+  if (!loadedSplitPdfDoc) return alert("Upload a PDF file first.");
+  if (!rangeInput) return alert("Enter page numbers (e.g. 1-3 or 1,2).");
+
+  const totalPages = loadedSplitPdfDoc.getPageCount();
+  const indices = new Set();
+
+  rangeInput.split(',').forEach(part => {
+    part = part.trim();
+    if (part.includes('-')) {
+      const [start, end] = part.split('-').map(num => parseInt(num.trim()));
+      if (!isNaN(start) && !isNaN(end)) {
+        for (let i = start; i <= end; i++) if (i >= 1 && i <= totalPages) indices.add(i - 1);
+      }
+    } else {
+      const num = parseInt(part);
+      if (!isNaN(num) && num >= 1 && num <= totalPages) indices.add(num - 1);
+    }
+  });
+
+  const pageIndices = Array.from(indices).sort((a, b) => a - b);
+  if (pageIndices.length === 0) return alert("Invalid page range.");
+
+  const newPdf = await PDFLib.PDFDocument.create();
+  const copiedPages = await newPdf.copyPages(loadedSplitPdfDoc, pageIndices);
+  copiedPages.forEach(page => newPdf.addPage(page));
+
+  const pdfBytes = await newPdf.save();
+  downloadBlob(new Blob([pdfBytes], { type: "application/pdf" }), "AK-Extracted.pdf");
+}
+
+function resetSplitPdf() {
+  loadedSplitPdfDoc = null;
+  pdfStates.split = { doc: null, page: 1, total: 0 };
+  document.getElementById("splitFile").value = "";
+  document.getElementById("splitPages").value = "";
+  document.getElementById("splitPreviewCanvas").style.display = "none";
+  document.getElementById("splitControls").style.display = "none";
+  document.getElementById("splitStatus").innerText = "Upload PDF to preview pages";
+}
+
+/* 12. 8 PASSPORT PHOTOS ON 4x6 CANVAS GENERATOR */
+let loadedPassportImg = null;
+
+function generatePassportGrid() {
+  const fileInput = document.getElementById("passImgFile");
+  const file = fileInput.files[0];
+  if (!file && !loadedPassportImg) return;
+
+  const canvas = document.getElementById("passportCanvas");
+  const ctx = canvas.getContext("2d");
+
+  const borderEnabled = document.getElementById("passBorderEnable").checked;
+  const borderColor = document.getElementById("passBorderColor").value;
+  const borderWidth = parseInt(document.getElementById("passBorderWidth").value) || 2;
+
+  const processGrid = (img) => {
+    // 4x6 inches at 300 DPI (Landscape orientation)
+    const canvasWidth = 1800;
+    const canvasHeight = 1200;
+
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+
+    // Background Fill
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+    // Grid layout parameters (2 rows x 4 columns = 8 photos)
+    const cols = 4;
+    const rows = 2;
+
+    const photoWidth = 370;
+    const photoHeight = 470;
+
+    const gapX = (canvasWidth - (cols * photoWidth)) / (cols + 1);
+    const gapY = (canvasHeight - (rows * photoHeight)) / (rows + 1);
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const x = gapX + c * (photoWidth + gapX);
+        const y = gapY + r * (photoHeight + gapY);
+
+        // Draw Passport Photo
+        ctx.drawImage(img, x, y, photoWidth, photoHeight);
+
+        // Draw Border
+        if (borderEnabled) {
+          ctx.save();
+          ctx.strokeStyle = borderColor;
+          ctx.lineWidth = borderWidth;
+          ctx.strokeRect(x, y, photoWidth, photoHeight);
+          ctx.restore();
+        }
+      }
+    }
+
+    canvas.style.display = "block";
+    document.getElementById("passPlaceholder").style.display = "none";
+  };
+
+  if (file && (!loadedPassportImg || loadedPassportImg.fileRef !== file)) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        loadedPassportImg = img;
+        loadedPassportImg.fileRef = file;
+        processGrid(img);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  } else if (loadedPassportImg) {
+    processGrid(loadedPassportImg);
+  }
+}
+
+function downloadPassportGrid() {
+  const canvas = document.getElementById("passportCanvas");
+  if (canvas.style.display === "none") return alert("Please upload a passport photo first.");
+
+  const link = document.createElement("a");
+  link.href = canvas.toDataURL("image/jpeg", 0.95);
+  link.download = "AK-Passport-4x6-Sheet.jpg";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function resetPassportGrid() {
+  loadedPassportImg = null;
+  document.getElementById("passImgFile").value = "";
+  document.getElementById("passBorderEnable").checked = true;
+  document.getElementById("passBorderColor").value = "#cccccc";
+  document.getElementById("passBorderWidth").value = 4;
+
+  const canvas = document.getElementById("passportCanvas");
+  canvas.style.display = "none";
+  document.getElementById("passPlaceholder").style.display = "block";
+}
+
+
+</script>
+
+</body>
+</html>
